@@ -27,7 +27,7 @@ Este projeto é um bot em Node.js que conecta grupos do WhatsApp ao Slack (e vic
 ## 📦 Instalação local
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
+git clone https://github.com/silviojr95/slack-whatsapp-integration.git
 cd seu-repositorio
 npm install
 ```
