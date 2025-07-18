@@ -4,7 +4,6 @@
 
 # 📦 Dependências e cache
 node_modules/
-package-lock.json
 
 # 📂 Dados de autenticação do WhatsApp
 .wwebjs_auth/
