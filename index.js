@@ -8,15 +8,12 @@ let isWhatsAppReady = false;
 
 // 🚀 Inicializa o WhatsApp client
 const client = new Client({
-  authStrategy: new LocalAuth(),
   puppeteer: {
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true
   },
-  webVersionCache: {
-    type: 'remote',
-    remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html'
-  }
+  authStrategy: new LocalAuth()
 });
 
 // 🟨 QR code para login
