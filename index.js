@@ -7,13 +7,25 @@ const fetch = require('node-fetch');
 let isWhatsAppReady = false;
 
 // 🚀 Inicializa o WhatsApp client
+const { RemoteAuth } = require('whatsapp-web.js');
+const { MongoStore } = require('whatsapp-web.js-remote-auth');
+
 const client = new Client({
   puppeteer: {
     executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true
   },
-  authStrategy: new LocalAuth()
+  authStrategy: new RemoteAuth({
+    store: new MongoStore({
+      mongoURI: process.env.MONGO_URI,
+      mongoOptions: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }
+    }),
+    backupSyncIntervalMs: 60000 // opcional, sincroniza sessão a cada 1min
+  })
 });
 
 // 🟨 QR code para login
