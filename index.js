@@ -8,25 +8,27 @@ let isWhatsAppReady = false;
 
 // 🚀 Inicializa o WhatsApp client
 const { RemoteAuth } = require('whatsapp-web.js');
-const { MongoStore } = require('whatsapp-web.js-remote-auth');
+const { MongoStore } = require('wwebjs-mongo');
+const mongoose = require('mongoose');
 
-const client = new Client({
-  puppeteer: {
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    headless: true
-  },
-  authStrategy: new RemoteAuth({
-    store: new MongoStore({
-      mongoURI: process.env.MONGO_URI,
-      mongoOptions: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      }
-    }),
-    backupSyncIntervalMs: 60000 // opcional, sincroniza sessão a cada 1min
-  })
+mongoose.connect(process.env.MONGO_URI).then(() => {
+  const store = new MongoStore({ mongoose });
+
+  const client = new Client({
+    puppeteer: {
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      args: ['--no-sandbox'],
+      headless: true
+    },
+    authStrategy: new RemoteAuth({
+      store,
+      backupSyncIntervalMs: 60000
+    })
+  });
+
+  client.initialize();
 });
+
 
 // 🟨 QR code para login
 client.on('qr', qr => {
