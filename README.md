@@ -52,7 +52,7 @@ node index.js
 2. Envie mensagens no grupo e veja elas chegando no Slack
 3. Envie mensagens no Slack e veja elas chegando no grupo
 
-# ☁️ Deploy com Render
+## ☁️ Deploy com Render
 1. Crie uma conta em Render
 2. Suba seu repositório no GitHub
 3. Crie um novo Web Service
