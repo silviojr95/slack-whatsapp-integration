@@ -5,6 +5,15 @@ const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 const qrcode = require('qrcode-terminal');
 const fetch = require('node-fetch');
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => res.send('Bot rodando!'));
+
+app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
+  console.log(`🚀 App escutando na porta ${process.env.PORT}`);
+});
+
 
 let isWhatsAppReady = false;
 
