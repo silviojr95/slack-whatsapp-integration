@@ -8,13 +8,7 @@ const fetch = require('node-fetch');
 
 let isWhatsAppReady = false;
 
-// 🚀 Slack App
-const slackApp = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET
-});
-
-// 🌐 Conexão com MongoDB
+// 🔗 Conecta ao MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ Conectado ao MongoDB');
@@ -25,7 +19,7 @@ mongoose.connect(process.env.MONGO_URI)
     const client = new Client({
       puppeteer: {
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: ['--no-sandbox'],
         headless: true
       },
       authStrategy: new RemoteAuth({
@@ -34,7 +28,12 @@ mongoose.connect(process.env.MONGO_URI)
       })
     });
 
-    // 📱 QR code para login
+    // 🧠 Confirma que a sessão foi salva
+    client.on('remote_session_saved', () => {
+      console.log('💾 Sessão registrada no MongoDB com sucesso!');
+    });
+
+    // 📱 QR Code para login
     client.on('qr', qr => {
       qrcode.generate(qr, { small: true });
       console.log('📱 Escaneie o QR Code com seu WhatsApp');
@@ -50,18 +49,23 @@ mongoose.connect(process.env.MONGO_URI)
 
     client.on('ready', async () => {
       isWhatsAppReady = true;
-      console.log('✅ WhatsApp está conectado!');
+      console.log('✅ WhatsApp está conectado e pronto!');
 
+      // 💾 Força salvamento da sessão
+      await client.authStrategy.save();
+      console.log('📝 Sessão salva manualmente após ready');
+
+      // Envia mensagem ao grupo do WhatsApp
       try {
         const chat = await client.getChatById(process.env.GRUPO_ID_WHATSAPP);
-        await chat.sendMessage('📣 Bot conectado ao Slack e ao WhatsApp com sucesso!');
+        await chat.sendMessage('📣 Bot conectado com RemoteAuth via MongoDB!');
         console.log(`📤 Mensagem enviada ao grupo: ${chat.name}`);
       } catch (err) {
-        console.error('❌ Erro ao enviar mensagem ao grupo:', err);
+        console.error('❌ Erro ao enviar mensagem inicial:', err);
       }
     });
 
-    // 📥 WhatsApp → Slack
+    // Integração WhatsApp → Slack
     client.on('message_create', async msg => {
       if (msg.fromMe && msg.body.includes('💬 Slack')) return;
 
@@ -77,18 +81,23 @@ mongoose.connect(process.env.MONGO_URI)
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: `📲 WhatsApp: ${msg.body}` })
           });
-          console.log('📤 Enviado ao Slack!');
+          console.log('📤 Mensagem enviada pro Slack');
         } catch (err) {
-          console.error('❌ Falha ao enviar pro Slack:', err);
+          console.error('❌ Erro ao enviar pro Slack:', err);
         }
       }
     });
 
-    // 🔄 Slack → WhatsApp
+    // Integração Slack → WhatsApp
+    const slackApp = new App({
+      token: process.env.SLACK_BOT_TOKEN,
+      signingSecret: process.env.SLACK_SIGNING_SECRET
+    });
+
     slackApp.message(async ({ message }) => {
       if (message.subtype === 'bot_message' || message.bot_id) return;
       if (!isWhatsAppReady) {
-        console.error('❌ WhatsApp não está pronto');
+        console.error('❌ WhatsApp ainda não está pronto');
         return;
       }
 
@@ -107,7 +116,7 @@ mongoose.connect(process.env.MONGO_URI)
           }
         }
       } catch (err) {
-        console.error('❌ Erro ao enviar do Slack para WhatsApp:', err);
+        console.error('❌ Erro ao enviar mensagem do Slack para WhatsApp:', err);
       }
     });
 
