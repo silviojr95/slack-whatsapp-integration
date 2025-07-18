@@ -18,7 +18,6 @@ mongoose.connect(process.env.MONGO_URI)
 // 🤖 Inicializa o WhatsApp com RemoteAuth
 const client = new Client({
     puppeteer: {
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: ['--no-sandbox'],
     headless: true
     },
