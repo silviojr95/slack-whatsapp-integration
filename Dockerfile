@@ -16,3 +16,13 @@ EXPOSE 3000
 
 # 🚀 Comando para iniciar o bot
 CMD ["node", "index.js"]
+
+RUN apk add --no-cache \
+  chromium \
+  nss \
+  freetype \
+  harfbuzz \
+  ca-certificates \
+  ttf-freefont
+
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
