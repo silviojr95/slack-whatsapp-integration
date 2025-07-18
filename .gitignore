@@ -1,0 +1,19 @@
+# 🔒 Arquivos privados
+.env
+*.log
+
+# 📦 Dependências e cache
+node_modules/
+package-lock.json
+
+# 📂 Dados de autenticação do WhatsApp
+.wwebjs_auth/
+.wwebjs_cache/
+
+# 🐙 Git e sistema operacional
+.DS_Store
+Thumbs.db
+
+# 🛠 Arquivos temporários
+*.tmp
+*.bak
