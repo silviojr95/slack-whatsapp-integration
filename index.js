@@ -10,8 +10,8 @@ let isWhatsAppReady = false;
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
-    headless: true,
-    args: ['--no-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true
   },
   webVersionCache: {
     type: 'remote',
