@@ -131,6 +131,3 @@ slackApp.message(async ({ message }) => {
 .catch(err => {
 console.error('❌ Erro ao conectar ao MongoDB:', err);
 });
-
-
-  
