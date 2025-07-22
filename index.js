@@ -10,6 +10,13 @@ const app = express();
 
 app.get('/', (req, res) => res.send('Bot rodando!'));
 
+app.post('/slack/events', express.json(), (req, res) => {
+  if (req.body.type === 'url_verification') {
+    return res.status(200).send(req.body.challenge);
+  }
+  // Aqui você trata os eventos reais
+});
+
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
   console.log(`🚀 App escutando na porta ${process.env.PORT}`);
 });
