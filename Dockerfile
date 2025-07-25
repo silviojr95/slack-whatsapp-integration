@@ -1,12 +1,12 @@
 # Node base LTS
-FROM node:20-alpine
+FROM node:20-bullseye
 
 # Diretório de trabalho
 WORKDIR /app
 
 # Dependências
 COPY package*.json ./
-RUN apt-get update && apt-get install -y git
+RUN apk update && apk add git
 RUN npm install
 
 # Cópia dos arquivos
