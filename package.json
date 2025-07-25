@@ -9,6 +9,7 @@
     "@wppconnect/wa-js": "^3.17.7",
     "playwright": "^1.54.0",
     "dotenv": "^17.2.1",
-    "undici": "^5.26.4"
+    "undici": "^5.26.4",
+    "@slack/bolt": "^3.12.2"    
   }
 }
