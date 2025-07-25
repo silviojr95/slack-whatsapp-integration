@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Dependências
 COPY package*.json ./
+RUN apt-get update && apt-get install -y git
 RUN npm install
 
 # Cópia dos arquivos
