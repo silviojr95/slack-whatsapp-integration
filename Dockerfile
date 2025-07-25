@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Dependências
 COPY package*.json ./
-RUN apk update && apk add git
+RUN apt-get update && apt-get install -y git
 RUN npm install
 
 # Cópia dos arquivos
