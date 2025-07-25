@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { chromium } = require('playwright');
-const WA = require('@wppconnect/wa-js');
 const { initSlack } = require('./slack');
 const log = require('./utils/logger');
 
@@ -11,6 +10,9 @@ const log = require('./utils/logger');
   await page.goto('https://web.whatsapp.com');
   await page.addScriptTag({ url: 'https://github.com/wppconnect-team/wa-js/releases/download/nightly/wppconnect-wa.js' });
   await page.waitForFunction(() => window.WPP?.isReady);
+
+  const WA = await page.evaluate(() => WPP.whatsapp.getAllChats());
+  console.log(WA);
 
   const isAuth = await page.evaluate(() => WPP.conn.isAuthenticated());
   if (!isAuth) {
