@@ -9,7 +9,7 @@ const log = require('./utils/logger');
   const page = await browser.newPage();
 
   await page.goto('https://web.whatsapp.com');
-  await page.addScriptTag({ path: require.resolve('@wppconnect/wa-js') });
+  await page.addScriptTag({ url: 'https://github.com/wppconnect-team/wa-js/releases/download/nightly/wppconnect-wa.js' });
   await page.waitForFunction(() => window.WPP?.isReady);
 
   const isAuth = await page.evaluate(() => WPP.conn.isAuthenticated());
