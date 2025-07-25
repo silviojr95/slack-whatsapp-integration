@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const qrcode = require('qrcode-terminal');
 const { fetch } = require('undici');
 const log = require('./utils/logger');
+const WA = require('@wppconnect/wa-js');
 
 module.exports = function initWhatsApp() {
   const store = new MongoStore({ mongoose });
@@ -65,6 +66,13 @@ module.exports = function initWhatsApp() {
     }
   });
 
+  
   global.WAClient = client;
+
+  WA.webpack.onReady(() => {
+    console.log('WA-JS pronto!');
+    WA.chat.sendTextMessage('5511999999999@c.us', 'Olá, Silvio!');
+  });
+  
   client.initialize();
 };
